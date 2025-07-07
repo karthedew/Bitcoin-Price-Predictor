@@ -1,0 +1,96 @@
+\section{Proposed Work}\label{sec:proposed_work}
+
+\subsection{Problem Statement}\label{subsec:problem_Statement}
+
+The purpose of this project is to:
+
+\begin{itemize}
+    \item Optimize AdaBoost, Random Forest, and SVM in predicting Bitcoin’s price.
+    \item Utilize these optimized models to construct and ensemble to improve the accuracy and decrease the variance of predictions.
+    \item Identify key features influencing Bitcoin price movements.
+    \item Evaluate the models based on accuracy and generalization to unseen data.
+    \item Provide a foundation for further research in cryptocurrency price forecasting.
+\end{itemize}
+
+This project will limit its scope to hyperparameter tuning for each individual regression model,
+apply a simple mean aggregation of these models and perform an analysis of its performance by
+looking at mean absolute error (MAE), mean squared error (MSE), and the coefficient of
+determination or R-squared (R2). Given that this is a jupyter notebook, flow of the document may
+be broken up by code. The intent is to have cells with `chunks' of code that are easier to read.
+As such, all description will be presented before the code blocks with the analysis writeup after
+the code blocks.
+
+\subsection{Data Preparation}\label{sec:data_preparation}
+
+For building successful models, data mining is imperative to its success by ensuring data is collected,
+clean, and preprocessed for use with each of the models before use. Data will be collected from various
+locations and most likely in the form of comma separated value (CSV) data files. Given data will come
+from different sources, it's time delta, size, shape, and time range were expected to be different. 
+Data cleaning to concatenate these datasets into a single data source that includes features needed for
+training and testing the model shall be performed. The cleaned dataset can then be stored in a parquet
+columnar based file. 
+
+Once the dataset is cleaned, a exploration of the data needs to be performed before using the dataset with
+the models. This is where dataprocessing comes into affect. The exploratory data analysis (EDA) can be
+informative for understanding the correlation between features in order to find potential multi-colinearity
+issues within the data. This stage can also include adding data transformations to the final dataset. It is
+understood within the blockchain community, that Bitcoin is a highly volatile asset. This volatility could
+lead to overpredicting to the price noise. While some methods can be utilized to reduce overfitting, adding
+a trailing average of previous price data can normalize direction of price movement.
+
+\subsection{Price Prediction Methodology}\label{subsec:price_prediction_methodology}
+
+Using AdaBoost, Random Forest, and Support Vector Machine models, a voting regressor will be used
+to ensemble these models into a final price prediction. The general methodology for tuning these
+individual models will be to utilize K-Fold and GridSearch to optimize a given set of parameters.
+
+The implementation of these models will be done using the scikit-learn Python library.
+
+\subsubsection{AdaBoost}\label{subsubsec:adaboost}
+
+AdaBoost works by sequentially building models that correct the
+errors made by previous models. Initially, a model is trained on the dataset, and subsequent models are built to address
+the misclassifications of the prior models. This iterative process continues until errors are minimized, resulting in a
+robust classifier. AdaBoost enhances prediction accuracy by combining multiple weak learners into a strong learner,
+creating a powerful ensemble model. As an ensemble learning method, AdaBoost is particularly effective in improving the
+performance of machine learning models by refining predictions through adaptive boosting\ \cite{adaBoostAnalyticsVidhya}.
+From the scikit-learn library, the AdaBoostRegressor class will be used.
+
+\subsubsection{Random Forest}\label{subsubsec:randomforest}
+
+Random Forest is an ensemble learning technique that improves upon bagging by introducing a small but
+crucial modification to decorrelate the decision trees. Like bagging, Random Forest constructs multiple
+decision trees using bootstrapped training samples. However, when building each tree, the algorithm
+randomly selects a subset of predictors (m) at each split, instead of considering all available
+predictors (p). This random selection ensures that no single predictor dominates the splits, which
+reduces the correlation between the trees. As a result, the predictions from the trees are more
+independent, leading to a greater reduction in variance and more reliable results. In situations
+with many correlated predictors, using a smaller subset of predictors (m) at each split helps improve
+model performance by preventing overfitting and increasing the diversity of the trees. This technique
+has been particularly effective in high-dimensional data, such as predicting cancer types based on
+gene expression data, where the model shows improved prediction accuracy over bagging\ \cite{James2023}.
+RandomForestRegressor will be used. 
+
+\subsubsection{Support Vector Machine}\label{subsubsec:svm}
+
+The support vector machine (SVM) is an advanced version of the maximal margin classifier, a simple and
+intuitive binary classifier that aims to separate two classes using a linear boundary. However, the
+maximal margin classifier is not suitable for most real-world datasets, as it requires the classes to be
+perfectly separable by a linear boundary. To address this limitation, the support vector classifier (SVC)
+was introduced as an extension, allowing for some flexibility by permitting misclassifications to improve
+robustness and generalizability. The support vector machine further extends the SVC by handling non-linear
+class boundaries, making it applicable to a wider range of datasets. Additionally, SVMs can be adapted for
+multi-class classification, and they share strong connections with other statistical methods like logistic
+regression, providing a powerful framework for binary and multi-class classification tasks\ \cite{James2023}.
+For the SVM implementation, the  SVR class will be used with a radial base function kernel. 
+
+\subsubsection{Voting Regressor}\label{subsubsec:voting_regressor}
+
+A Voting Regressor is an ensemble learning technique that combines predictions from multiple regression models to improve
+the accuracy and robustness of predictions. It aggregates the outputs of various base models, typically through averaging,
+to create a stronger final prediction. This helps in reducing the risk of overfitting compared to relying on a single model.
+The Voting Regressor can accommodate different types of regressors (such as Linear Regression, Random Forest, and Support
+Vector Regression) and allows for weighted combinations of their predictions. By assigning different weights to each model
+based on its performance, the Voting Regressor can further enhance prediction accuracy. This ensemble method is effective
+in improving the generalization of machine learning models by leveraging the strengths of multiple base
+regressors\ \cite{votingRegressorMedium}.

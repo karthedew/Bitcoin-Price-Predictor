@@ -1,0 +1,43 @@
+\documentclass[sigconf]{acmart}
+\setcopyright{none}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+\settopmatter{printacmref=true}  % Ensures ACM reference format is included
+\usepackage{balance}  % Load balance package for column balancing
+
+\begin{document}
+
+\title{Using Voting Regression to Predict Bitcoin Price}
+
+\author{Karl Schmidt}
+\email{karl.schmidt@colorado.edu}
+\affiliation{%
+  \institution{University of Colorado Boulder}
+  \city{Boulder}
+  \state{CO}
+  \country{USA}
+}
+
+\acmConference[ ]{ }{ }{}
+\acmBooktitle{}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+\input{abstract/abstract.tex}
+
+\maketitle
+
+\input{introduction/introduction.tex}
+\input{related_work/related_work.tex}
+\input{methodology/methodology.tex}
+\input{evaluation/evaluation.tex}
+\input{discussion/discussion.tex}
+\input{conclusion/conclusion.tex}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}
